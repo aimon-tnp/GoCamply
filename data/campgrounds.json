@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Camp Sunnyvale",
+        "address": "12 Pine St, Sunnyvale, CA",
+        "telephone": "0100000001"
+    },
+    {
+        "name": "Redwood Retreat",
+        "address": "200 Redwood Ave, Arcata, CA",
+        "telephone": "0100000002"
+    },
+    {
+        "name": "Lakeview Camp",
+        "address": "45 Lake Rd, Lakeport, CA",
+        "telephone": "0100000003"
+    },
+    {
+        "name": "Pine Hollow",
+        "address": "77 Hollow Ln, Pineville, OR",
+        "telephone": "0100000004"
+    },
+    {
+        "name": "Oak Ridge",
+        "address": "3 Oak Ridge Dr, Oakton, WA",
+        "telephone": "0100000005"
+    },
+    {
+        "name": "Meadowbrook",
+        "address": "150 Meadowbrook Blvd, Meadowvale, OR",
+        "telephone": "0100000006"
+    },
+    {
+        "name": "Riverbend",
+        "address": "9 Riverbend Pkwy, Riverton, CA",
+        "telephone": "0100000007"
+    },
+    {
+        "name": "Misty Pines",
+        "address": "210 Misty Pines Rd, Foggy Bottom, WA",
+        "telephone": "0100000008"
+    },
+    {
+        "name": "Eagle's Nest",
+        "address": "1 Ridgecrest Dr, Eagle Rock, CA",
+        "telephone": "0100000009"
+    },
+    {
+        "name": "Whispering Pines",
+        "address": "88 Whisper Ln, Pinesville, OR",
+        "telephone": "0100000010"
+    },
+    {
+        "name": "Sunset Point",
+        "address": "404 Sunset Blvd, Sunset City, CA",
+        "telephone": "0100000011"
+    },
+    {
+        "name": "Bluewater Bay",
+        "address": "600 Bluewater Dr, Baytown, CA",
+        "telephone": "0100000012"
+    },
+    {
+        "name": "Cedar Grove",
+        "address": "23 Cedar Grove Rd, Cedarville, WA",
+        "telephone": "0100000013"
+    },
+    {
+        "name": "Hilltop Haven",
+        "address": "99 Hilltop Cir, Hillside, OR",
+        "telephone": "0100000014"
+    },
+    {
+        "name": "Granite Falls",
+        "address": "7 Granite Falls Rd, Granite, WA",
+        "telephone": "0100000015"
+    },
+    {
+        "name": "Willow Creek",
+        "address": "12 Willow Creek Ln, Willow City, CA",
+        "telephone": "0100000016"
+    },
+    {
+        "name": "Starlight Camp",
+        "address": "300 Starlight Ave, Star City, OR",
+        "telephone": "0100000017"
+    },
+    {
+        "name": "Fox Hollow",
+        "address": "55 Fox Hollow Rd, Foxboro, WA",
+        "telephone": "0100000018"
+    },
+    {
+        "name": "Lantern Grove",
+        "address": "2 Lantern St, Grove Town, CA",
+        "telephone": "0100000019"
+    },
+    {
+        "name": "Spruce Ridge",
+        "address": "18 Spruce Ridge Rd, Spruceton, OR",
+        "telephone": "0100000020"
+    }
+]
