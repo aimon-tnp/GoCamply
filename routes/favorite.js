@@ -1,0 +1,10 @@
+
+const express = require('express');
+const { addFavorite } = require('../controllers/favorite');
+const router = express.Router({ mergeParams: true });
+const { protect } = require('../middleware/auth');
+
+router.post('/', protect, addFavorite);
+
+
+module.exports = router;
