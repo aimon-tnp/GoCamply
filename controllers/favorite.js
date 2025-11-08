@@ -32,3 +32,25 @@ exports.addFavorite = async (req, res, next) => {
     });
     }
 };
+
+// @desc    Remove favorite campground
+// DELETE /api/v1/campgrounds/:campgroundId/favorite
+// @access  Private
+exports.removeFavorite = async (req, res, next) => {
+  try {
+    await Favorite.deleteOne({
+      user: req.user.id,
+      campground: req.params.campgroundId,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {},
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot remove favorite',
+    });
+  }
+};
