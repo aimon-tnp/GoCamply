@@ -22,6 +22,7 @@ app.use(cors());
 const campgrounds = require('./routes/campgrounds');
 const appointments = require('./routes/appointments');
 const auth = require('./routes/auth');
+const favorite  = require('./routes/favorite');
 const { decodeStream } = require('iconv-lite');
 
 // Swagger set up
@@ -72,6 +73,8 @@ app.use(limiter);
 app.use('/api/v1/campgrounds', campgrounds);
 app.use('/api/v1/appointments', appointments);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/campgrounds/:campgroundId/favorite', favorite);
+app.use('/api/v1/favorites', favorite);
 
 const PORT = process.env.PORT || 5003;
 const server = app.listen(PORT, () => {
