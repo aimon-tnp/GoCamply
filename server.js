@@ -74,6 +74,7 @@ app.use('/api/v1/campgrounds', campgrounds);
 app.use('/api/v1/appointments', appointments);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/campgrounds/:campgroundId/favorite', favorite);
+app.use('/api/v1/favorites', favorite);
 
 const PORT = process.env.PORT || 5003;
 const server = app.listen(PORT, () => {

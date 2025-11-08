@@ -54,3 +54,28 @@ exports.removeFavorite = async (req, res, next) => {
     });
   }
 };
+
+// @desc    Get current user's favorite campgrounds
+// GET /api/v1/favorites
+// @access  Private
+exports.getMyFavorites = async (req, res, next) => {
+  try {
+    const favorites = await Favorite.find({ user: req.user.id }).populate({
+      path: 'campground',
+      select: 'name address telephone',
+    });
+
+
+
+    res.status(200).json({
+      success: true,
+      count: favorites.length,
+      data: favorites,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot get favorites',
+    });
+  }
+};
