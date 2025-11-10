@@ -170,3 +170,60 @@ exports.deleteCampground = async (req, res, next) => {
         });
     }
 };
+
+// @desc    Get availability calendar for a campground
+// @route   GET /api/v1/campgrounds/:campgroundId/availability
+// @access  Public
+exports.getAvailability = async (req, res, next) => {
+  try {
+    const campground = await Campground.findById(req.params.campgroundId);
+
+    if (!campground) {
+      return res.status(404).json({
+        success: false,
+        message: `No campground with the id of ${req.params.campgroundId}`,
+      });
+    }
+
+    // ดึง appointments ของแคมป์นั้นทั้งหมด
+    const appointments = await Appointment.find({
+      campground: req.params.campgroundId,
+    });
+
+    // รวมจำนวนการจองในแต่ละวัน
+    const bookingMap = {};
+    appointments.forEach(appt => {
+      const dateKey = appt.apptDate.toISOString().split('T')[0];
+      bookingMap[dateKey] = (bookingMap[dateKey] || 0) + 1;
+    });
+
+    // สร้าง calendar รายวัน (เช่น 30 วันนับจากวันนี้)
+    const today = new Date();
+    const availability = [];
+    for (let i = 0; i < 30; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const dateKey = date.toISOString().split('T')[0];
+      const booked = bookingMap[dateKey] || 0;
+
+      availability.push({
+        date: dateKey,
+        booked,
+        available: Math.max(0, campground.dailyCapacity - booked),
+        isFull: booked >= campground.dailyCapacity,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      campground: campground.name,
+      availability,
+    });
+  } catch (err) {
+    console.error('Error in getAvailability:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Cannot get availability',
+    });
+  }
+};
