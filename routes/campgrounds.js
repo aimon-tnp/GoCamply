@@ -1,7 +1,7 @@
 // TODO: swagger documentation
 
 const express = require('express');
-const {getCampgrounds, getCampground, createCampground, updateCampground, deleteCampground} = require('../controllers/Campgrounds');
+const {getCampgrounds, getCampground, createCampground, updateCampground, deleteCampground, getAvailability} = require('../controllers/Campgrounds');
 const router = express.Router();
 const {protect, authorize} = require('../middleware/auth');
 const appointmentRouter = require('./appointments');
@@ -12,5 +12,6 @@ const appointmentRouter = require('./appointments');
 router.use('/:campgroundId/appointments', appointmentRouter);
 router.route('/').get(getCampgrounds).post(protect, authorize('admin'), createCampground);
 router.route('/:id').get(getCampground).put(protect, authorize('admin'), updateCampground).delete(protect, authorize('admin'), deleteCampground);
+router.route('/:campgroundId/availability').get(getAvailability);
 
 module.exports = router;
