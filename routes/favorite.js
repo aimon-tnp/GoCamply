@@ -20,6 +20,10 @@
  *     responses:
  *       201:
  *         description: Favorite created
+ *       400:
+ *         description: Already favorited (duplicate)
+ *       500:
+ *         description: Server error while adding favorite
  *   delete:
  *     summary: Remove campground from user's favorites
  *     tags: [Favorites]
@@ -34,6 +38,8 @@
  *     responses:
  *       200:
  *         description: Removed
+ *       500:
+ *         description: Server error while removing favorite
  *
  * /api/v1/favorites:
  *   get:
@@ -44,6 +50,8 @@
  *     responses:
  *       200:
  *         description: List of favorites
+ *       500:
+ *         description: Server error while retrieving favorites
  */
 
 const express = require('express');
