@@ -1,0 +1,26 @@
+@startuml Authentication and Registration Diagram
+
+title Registration, Login, and Logout Flow
+
+actor User
+participant "Web App" as App
+participant "Auth Service" as Auth
+
+User -> App: Open registration page
+User -> App: Submit registration details
+App -> Auth: Create user account
+Auth --> App: Account created
+App --> User: Registration successful
+
+User -> App: Open login page
+User -> App: Submit credentials
+App -> Auth: Verify credentials
+Auth --> App: Return authentication status
+App --> User: Login successful
+
+User -> App: Click logout
+App -> Auth: Invalidate session
+Auth --> App: Session invalidated
+App --> User: Logout successful
+
+@enduml
