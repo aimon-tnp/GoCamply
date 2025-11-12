@@ -31,6 +31,8 @@
  *     responses:
  *       200:
  *         description: Registered user with token
+ *       400:
+ *         description: Validation error or bad request while registering
  *
  * /api/v1/auth/login:
  *   post:
@@ -53,6 +55,10 @@
  *     responses:
  *       200:
  *         description: User credentials validated and token returned
+ *       400:
+ *         description: Missing email or password
+ *       401:
+ *         description: Invalid credentials or cannot login
  *
  * /api/v1/auth/me:
  *   get:
@@ -63,6 +69,8 @@
  *     responses:
  *       200:
  *         description: Current user
+ *       401:
+ *         description: Unauthorized (missing/invalid token)
  *
  * /api/v1/auth/logout:
  *   get:
@@ -73,6 +81,8 @@
  *     responses:
  *       200:
  *         description: Logged out
+ *       401:
+ *         description: Unauthorized (missing/invalid token)
  */
 
 const express = require('express');
