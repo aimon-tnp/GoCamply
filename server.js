@@ -34,12 +34,22 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'A simple Express Library API'
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
     servers: [
       {
         url: 'http://localhost:5003/api/v1'
       }
     ],
   },
+  // Scan route files for JSDoc/OpenAPI comments
   apis: ['./routes/*.js']
 };
 
