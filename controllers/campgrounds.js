@@ -172,7 +172,7 @@ exports.deleteCampground = async (req, res, next) => {
 };
 
 // @desc    Get availability calendar for a campground
-// @route   GET /api/v1/campgrounds/:campgroundId/availability
+// @route   GET /api/v1/campgrounds/:campgroundId/availability?month=12&year=2025
 // @access  Public
 exports.getAvailability = async (req, res, next) => {
   try {
@@ -185,24 +185,48 @@ exports.getAvailability = async (req, res, next) => {
       });
     }
 
-    // ดึง appointments ของแคมป์นั้นทั้งหมด
+    const monthParam = parseInt(req.query.month, 10);
+    const yearParam = parseInt(req.query.year, 10);
+    const useMonthView = !Number.isNaN(monthParam) && !Number.isNaN(yearParam);
+
+    if (useMonthView && (monthParam < 1 || monthParam > 12)) {
+      return res.status(400).json({
+        success: false,
+        message: 'month must be between 1 and 12',
+      });
+    }
+
+    let calendarStart = new Date();
+    calendarStart.setHours(0, 0, 0, 0);
+    let totalDays = 30;
+
+    if (useMonthView) {
+      calendarStart = new Date(yearParam, monthParam - 1, 1);
+      calendarStart.setHours(0, 0, 0, 0);
+      totalDays = new Date(yearParam, monthParam, 0).getDate();
+    }
+
+    const periodEnd = new Date(calendarStart);
+    periodEnd.setDate(calendarStart.getDate() + totalDays);
+
+    // ดึง appointments ของแคมป์ภายในช่วงเวลาที่ต้องการ
     const appointments = await Appointment.find({
       campground: req.params.campgroundId,
+      apptDate: { $gte: calendarStart, $lt: periodEnd },
     });
 
     // รวมจำนวนการจองในแต่ละวัน
     const bookingMap = {};
-    appointments.forEach(appt => {
+    appointments.forEach((appt) => {
       const dateKey = appt.apptDate.toISOString().split('T')[0];
       bookingMap[dateKey] = (bookingMap[dateKey] || 0) + 1;
     });
 
-    // สร้าง calendar รายวัน (เช่น 30 วันนับจากวันนี้)
-    const today = new Date();
+    // สร้าง calendar รายวัน
     const availability = [];
-    for (let i = 0; i < 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(calendarStart);
+      date.setDate(calendarStart.getDate() + i);
       const dateKey = date.toISOString().split('T')[0];
       const booked = bookingMap[dateKey] || 0;
 
@@ -217,6 +241,8 @@ exports.getAvailability = async (req, res, next) => {
     res.status(200).json({
       success: true,
       campground: campground.name,
+      month: useMonthView ? monthParam : undefined,
+      year: useMonthView ? yearParam : undefined,
       availability,
     });
   } catch (err) {
