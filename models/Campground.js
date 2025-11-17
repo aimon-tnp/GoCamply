@@ -19,10 +19,10 @@ const CampgroundSchema = new mongoose.Schema({
         match: [/^0\d{9}$/, "Please add a valid telephone number"],
     },
     dailyCapacity: {
-    type: Number,
-    default: 1,
-  },
-    
+        type: Number,
+        default: 1,
+    },
+
 });
 
 // Reverse populate with virtuals

@@ -1,0 +1,99 @@
+@startuml Class Diagram
+title Domain classes - aligned with models
+
+'' This diagram reflects the Mongoose models in models/:
+'' - User, Campground, Appointment, Favorite
+'' - ObjectId fields reference other models
+
+class User {
+  - id: ObjectId
+  - name: String
+  - telephone: String
+  - email: String
+  - role: String = "user"
+  - password: String <<private>>
+  - resetPasswordToken: String
+  - resetPasswordExpire: Date
+  - createdAt: Date
+  + getSignedJwtToken()
+  + matchPassword()
+}
+
+class Campground {
+  - _id: ObjectId
+  - name: String
+  - address: String
+  - telephone: String
+  - dailyCapacity: Number
+}
+
+class Appointment {
+  - id: ObjectId
+  - apptDate: Date
+  - user: ObjectId
+  - campground: ObjectId
+  - createdAt: Date
+}
+
+class Favorite {
+  - id: ObjectId
+  - user: ObjectId
+  - campground: ObjectId
+  - createdAt: Date
+}
+
+note right of Favorite
+  Unique index on (user, campground)
+end note
+
+
+' Controller classes (expose API endpoints)
+class CampgroundController {
+  + getCampgrounds(req, res)
+  + getCampground(req, res)
+  + createCampground(req, res)
+  + updateCampground(req, res)
+  + deleteCampground(req, res)
+  + getAvailability(req, res)
+}
+
+class AppointmentController {
+  + getAppointments(req, res)
+  + getAppointment(req, res)
+  + addAppointment(req, res)
+  + updateAppointment(req, res)
+  + deleteAppointment(req, res)
+}
+
+class FavoriteController {
+  + addFavorite(req, res)
+  + removeFavorite(req, res)
+  + getMyFavorites(req, res)
+}
+
+class AuthController {
+  + register(req, res)
+  + login(req, res)
+  + logout(req, res)
+  + getMe(req, res)
+}
+
+' Controller -> Model dependencies
+CampgroundController ..> Campground : uses
+AppointmentController ..> Appointment : uses
+AppointmentController ..> Campground : uses
+FavoriteController ..> Favorite : uses
+FavoriteController ..> Campground : uses
+AuthController ..> User : uses
+
+' Relationships
+User "1" o-- "0..3" Appointment : makes
+User "1" o-- "*" Favorite : bookmarks
+Campground "1" o-- "*" Appointment : hosts
+Campground "1" o-- "*" Favorite : is_bookmarked
+
+note right of Appointment
+  Max 3 appointments per user (enforced in AppointmentController.addAppointment)
+end note
+
+@enduml

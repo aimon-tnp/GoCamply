@@ -103,16 +103,43 @@ exports.getCampground = async (req, res, next) => {
 };
 
 // @desc    Create new campground
-// @route   POST /api/v1/ca
+// @route   POST /api/v1/campgrounds
 // @access  Private
 exports.createCampground = async (req, res, next) => {
-    // console.log(req.body);
-    const campground = await Campground.create(req.body);
+    try {
+        // console.log(req.body);
+        const campground = await Campground.create(req.body);
 
-    res.status(201).json({
-        success: true,
-        data: campground,
-    });
+        return res.status(201).json({
+            success: true,
+            data: campground,
+        });
+    } catch (err) {
+        // Duplicate key error (unique constraint)
+        if (err.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                error: "Duplicate field value entered",
+                fields: err.keyValue || null,
+            });
+        }
+
+        // Mongoose validation error
+        if (err.name === "ValidationError") {
+            const messages = Object.values(err.errors).map((val) => val.message);
+            return res.status(400).json({
+                success: false,
+                error: messages,
+            });
+        }
+
+        // Fallback server error
+        console.error("Error creating campground:", err);
+        return res.status(500).json({
+            success: false,
+            error: "Server Error",
+        });
+    }
 };
 
 // @desc    Update single campground
@@ -175,15 +202,8 @@ exports.deleteCampground = async (req, res, next) => {
 // @route   GET /api/v1/campgrounds/:campgroundId/availability?month=12&year=2025
 // @access  Public
 exports.getAvailability = async (req, res, next) => {
-  try {
-    const campground = await Campground.findById(req.params.campgroundId);
-
-    if (!campground) {
-      return res.status(404).json({
-        success: false,
-        message: `No campground with the id of ${req.params.campgroundId}`,
-      });
-    }
+    try {
+        const campground = await Campground.findById(req.params.campgroundId);
 
     const monthParam = parseInt(req.query.month, 10);
     const yearParam = parseInt(req.query.year, 10);

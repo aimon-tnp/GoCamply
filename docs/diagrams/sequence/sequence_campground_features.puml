@@ -1,0 +1,25 @@
+@startuml Browsing Campgrounds Diagram
+
+title Campground Features Flow
+
+actor User
+participant "Web App" as App
+participant "Campground Service" as Camp
+participant "Favorite Service" as Fav
+
+User -> App: Open campgrounds page
+App -> Camp: Fetch campgrounds list
+Camp --> App: Return campgrounds list
+App --> User: Display campgrounds
+
+User -> App: Mark campground as favorite
+App -> Fav: Add to favorites
+Fav --> App: Favorite added
+App --> User: Confirmation
+
+User -> App: Check availability
+App -> Camp: Get availability details
+Camp --> App: Return availability
+App --> User: Display availability
+
+@enduml
