@@ -1,0 +1,30 @@
+@startuml Use Case Diagram
+left to right direction
+actor "User" as user
+rectangle "GoCamply System" as GoCamplySystem {    
+    usecase "Register" as register
+    usecase "Login" as login
+    usecase "Logout" as logout
+    usecase "View Campgrounds" as viewCampgrounds
+    usecase "Manage Appointment" as manageAppt
+    usecase "Manage Campground" as manageCampground
+    usecase "Favorite Campground" as favoriteCampground
+    usecase "Get Availability" as getAvailability
+}
+
+user -- register
+user -- viewCampgrounds
+user -- manageAppt
+user -- favoriteCampground
+user -- login
+user -- logout
+user -- getAvailability
+
+actor "Admin" as admin
+register -- admin
+login -- admin
+logout -- admin
+manageCampground -- admin
+manageAppt -- admin
+
+@enduml
