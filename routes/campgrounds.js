@@ -191,7 +191,7 @@
  */
 
 const express = require('express');
-const {getCampgrounds, getCampground, createCampground, updateCampground, deleteCampground, getAvailability} = require('../controllers/Campgrounds');
+const {getCampgrounds, getCampground, createCampground, updateCampground, deleteCampground, getAvailability} = require('../controllers/campgrounds');
 const router = express.Router();
 const {protect, authorize} = require('../middleware/auth');
 const appointmentRouter = require('./appointments');
