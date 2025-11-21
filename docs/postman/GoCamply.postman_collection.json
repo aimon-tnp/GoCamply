@@ -31,7 +31,7 @@
 							"query": [
 								{
 									"key": "select",
-									"value": "name,province,postalcode",
+									"value": "name,address,postalcode",
 									"disabled": true
 								},
 								{
