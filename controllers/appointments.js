@@ -20,12 +20,12 @@ exports.getAppointments = async (req, res, next) => {
       console.log(req.params.campgroundId);
       query = Appointment.find({ campground: req.params.campgroundId }).populate({
         path: "campground",
-        select: "name province telephone",
+        select: "name address telephone",
       });
     } else
       query = Appointment.find().populate({
         path: "campground",
-        select: "name province telephone",
+        select: "name address telephone",
       });
   }
 
@@ -53,7 +53,7 @@ exports.getAppointment = async (req, res, next) => {
   try {
     const appointment = await Appointment.findById(req.params.id).populate({
       path: "campground",
-      select: "name province telephone",
+      select: "name address telephone",
     });
 
     if (!appointment) {
