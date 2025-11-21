@@ -1,5 +1,5 @@
 const Campground = require("../models/Campground");
-const Appointment = require("../models/Appointment");
+const Booking = require("../models/Booking");
 
 // @desc    Get all campgrounds
 // @route   GET /api/v1/campgrounds
@@ -21,7 +21,7 @@ exports.getCampgrounds = async (req, res, next) => {
         (match) => `$${match}`
     );
 
-    query = Campground.find(JSON.parse(queryStr)).populate("appointments");
+    query = Campground.find(JSON.parse(queryStr)).populate("bookings");
 
     // Select Fields
     if (req.query.select) {
@@ -184,7 +184,7 @@ exports.deleteCampground = async (req, res, next) => {
                 success: false,
             });
         }
-        await Appointment.deleteMany({ campground: req.params.id });
+        await Booking.deleteMany({ campground: req.params.id });
         await Campground.deleteOne({ _id: req.params.id });
 
         return res.status(200).json({
@@ -229,15 +229,15 @@ exports.getAvailability = async (req, res, next) => {
         const periodEnd = new Date(calendarStart);
         periodEnd.setDate(calendarStart.getDate() + totalDays);
 
-        // ดึง appointments ของแคมป์ภายในช่วงเวลาที่ต้องการ
-        const appointments = await Appointment.find({
+        // ดึง bookings ของแคมป์ภายในช่วงเวลาที่ต้องการ
+        const bookings = await Booking.find({
             campground: req.params.campgroundId,
             apptDate: { $gte: calendarStart, $lt: periodEnd },
         });
 
         // รวมจำนวนการจองในแต่ละวัน
         const bookingMap = {};
-        appointments.forEach((appt) => {
+        bookings.forEach((appt) => {
             const dateKey = appt.apptDate.toISOString().split("T")[0];
             bookingMap[dateKey] = (bookingMap[dateKey] || 0) + 1;
         });

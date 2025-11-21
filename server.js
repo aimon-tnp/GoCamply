@@ -20,7 +20,7 @@ connectDB();
 const app = express();
 app.use(cors());
 const campgrounds = require('./routes/campgrounds');
-const appointments = require('./routes/appointments');
+const bookings = require('./routes/bookings');
 const auth = require('./routes/auth');
 const favorite  = require('./routes/favorite');
 const { decodeStream } = require('iconv-lite');
@@ -81,7 +81,7 @@ app.use(limiter);
 
 // Mount routers
 app.use('/api/v1/campgrounds', campgrounds);
-app.use('/api/v1/appointments', appointments);
+app.use('/api/v1/bookings', bookings);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/campgrounds/:campgroundId/favorite', favorite);
 app.use('/api/v1/favorites', favorite);

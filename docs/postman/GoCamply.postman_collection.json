@@ -473,7 +473,7 @@
 			]
 		},
 		{
-			"name": "Appointments",
+			"name": "Bookings",
 			"item": [
 				{
 					"name": "Get All Appts",
@@ -491,14 +491,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/appointments",
+							"raw": "{{URL}}/api/v1/bookings",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"appointments"
+								"bookings"
 							]
 						}
 					},
@@ -520,7 +520,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/campgrounds/:id/appointments",
+							"raw": "{{URL}}/api/v1/campgrounds/:id/bookings",
 							"host": [
 								"{{URL}}"
 							],
@@ -529,7 +529,7 @@
 								"v1",
 								"campgrounds",
 								":id",
-								"appointments"
+								"bookings"
 							],
 							"variable": [
 								{
@@ -557,14 +557,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/appointments/69087169670c913e88921707",
+							"raw": "{{URL}}/api/v1/bookings/69087169670c913e88921707",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"appointments",
+								"bookings",
 								"69087169670c913e88921707"
 							]
 						}
@@ -603,7 +603,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/campgrounds/690870d00822c83527b5ccf8/appointments",
+							"raw": "{{URL}}/api/v1/campgrounds/690870d00822c83527b5ccf8/bookings",
 							"host": [
 								"{{URL}}"
 							],
@@ -612,7 +612,7 @@
 								"v1",
 								"campgrounds",
 								"690870d00822c83527b5ccf8",
-								"appointments"
+								"bookings"
 							]
 						}
 					},
@@ -650,14 +650,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/appointments/69087169670c913e88921707",
+							"raw": "{{URL}}/api/v1/bookings/69087169670c913e88921707",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"appointments",
+								"bookings",
 								"69087169670c913e88921707"
 							]
 						}
@@ -688,14 +688,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{URL}}/api/v1/appointments/69087186670c913e88921711",
+							"raw": "{{URL}}/api/v1/bookings/69087186670c913e88921711",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"appointments",
+								"bookings",
 								"69087186670c913e88921711"
 							]
 						}

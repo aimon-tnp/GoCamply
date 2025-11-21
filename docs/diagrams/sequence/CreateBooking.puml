@@ -1,0 +1,46 @@
+@startuml Create Booking (POST)
+
+header GoCamply Sequence Diagram
+footer Page %page% of %lastpage%
+title "Create Booking (POST)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:campgrounds" as routerCampgrounds
+participant "<<router>>\n:bookings" as routerBookings
+participant "<<middleware>>\n:protect" as mwProtect
+participant "<<middleware>>\n:authorize('admin','user')" as mwAuthorize
+participant "<<controllers>>\n:bookings" as controllersBookings
+participant "<<model>>\n:Booking" as modelBooking
+participant "<<model>>\n:Campground" as modelCampground
+database "<<MongoDB>>\n:bookings" as BookingsDatabase
+
+client->server ++: req.post('/api/v1/campgrounds/{campgroundId}/bookings')
+server->routerCampgrounds ++: app.use('/api/v1/campgrounds', campgrounds)
+routerCampgrounds -> routerBookings ++: mount '/:campgroundId/bookings'
+routerBookings -> mwProtect ++: protect(req)
+mwProtect -> mwProtect --: verify token / set req.user
+mwProtect --> routerBookings --: next()
+routerBookings -> mwAuthorize ++: authorize('admin','user')(req)
+mwAuthorize -> mwAuthorize --: check req.user.role
+mwAuthorize --> routerBookings --: next() (if allowed)
+routerBookings -> controllersBookings ++: addBooking(req)
+controllersBookings -> modelCampground ++: findById(req.params.campgroundId)
+modelCampground -> BookingsDatabase ++: find campground
+BookingsDatabase --> modelCampground --: campground
+controllersBookings <-- modelCampground --: campground
+controllersBookings -> modelBooking ++: find({ user: req.user.id })
+modelBooking -> BookingsDatabase ++: query existing bookings
+BookingsDatabase --> modelBooking --: existedBookings
+controllersBookings <-- modelBooking --: existedBookings
+controllersBookings -> modelBooking ++: create(req.body with user,campground)
+modelBooking -> BookingsDatabase ++: Booking.create
+BookingsDatabase --> modelBooking --: booking
+controllersBookings <-- modelBooking --: booking
+controllersBookings -> client --: response 200 { success: true, data: booking }
+
+note over mwAuthorize: If user is not allowed -> 403 forbidden
+note over controllersBookings: If campground not found -> 404
+note over controllersBookings: If user reached limit -> 400
+
+@enduml

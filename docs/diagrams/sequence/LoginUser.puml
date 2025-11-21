@@ -1,0 +1,28 @@
+@startuml Login User (POST)
+
+header GoCamply Sequence Diagram
+footer Page %page% of %lastpage%
+title "Login User (POST)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:auth" as routerAuth
+participant "<<controllers>>\n:auth" as controllersAuth
+participant "<<model>>\n:User" as modelUser
+database "<<MongoDB>>\n:users" as UsersDatabase
+
+client->server ++: req.post('/api/v1/auth/login') { email, password }
+server->routerAuth ++: app.use('/api/v1/auth', auth)
+routerAuth -> controllersAuth ++: login(req)
+controllersAuth -> controllersAuth ++: validate email & password
+controllersAuth -> modelUser ++: findOne({ email }).select('+password')
+modelUser -> UsersDatabase ++: query user by email
+UsersDatabase --> modelUser --: user (with hashed password)
+controllersAuth <-- modelUser --: user
+controllersAuth -> controllersAuth ++: user.matchPassword(password)
+controllersAuth -> controllersAuth ++: if match -> sendTokenResponse(user)
+controllersAuth -> client --: response 200 { success: true, _id, name, telephone, email, token }
+
+note over controllersAuth: if missing creds -> 400; if invalid -> 401
+
+@enduml

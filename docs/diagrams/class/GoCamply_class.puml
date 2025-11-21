@@ -1,0 +1,93 @@
+@startuml GoCamplyClass
+skinparam packageStyle square
+skinparam linetype ortho
+
+class "<<Application>>\nGoCamplyService" as GoCamplyService {}
+
+' Grouping these helps the layout engine keep them close
+class "<<Resource>>\nCampgrounds" as ResourceCampgrounds{
+    <<GET>> +getCampgrounds(): Campground[]
+    <<POST>> +createCampground(): Campground
+}
+
+class "<<Resource>>\nCampground" as ResourceCampground {
+    <<GET>> +getCampground(): Campground
+    <<PUT>> +updateCampground(): Campground
+    <<DELETE>> +deleteCampground(): void
+    <<GET>> +getAvailability(): Availability[]
+}
+
+class "<<Resource>>\nBookings" as ResourceBookings{
+    <<GET>> +getBookings(): Booking[]
+    <<POST>> +addBooking(): Booking
+}
+
+class "<<Resource>>\nBooking" as ResourceBooking{
+    <<GET>> +getBooking(): Booking
+    <<PUT>> +updateBooking(): Booking
+    <<DELETE>> +deleteBooking(): void
+}
+
+class "<<Resource>>\nFavorites" as ResourceFavorites{
+    <<POST>> +addFavorite(): Favorite
+    <<DELETE>> +removeFavorite(): void
+    <<GET>> +getMyFavorites(): Favorite[]
+}
+
+class "<<Resource>>\nAuth" as ResourceAuth{
+    <<POST>> +register(): User
+    <<POST>> +login(): { token }
+    <<GET>> +getMe(): User
+    <<GET>> +logout(): void
+}
+
+class "<<Representation>>\nUser" as RepresentationUser {
+    -name: String
+    -email: String
+    -role: String
+}
+
+class "<<Representation>>\nCampground" as RepresentationCampground {
+    -name: String
+    -address: String
+}
+
+class "<<Representation>>\nBooking" as RepresentationBooking {
+    -apptDate: Date
+}
+
+class "<<Representation>>\nFavorite" as RepresentationFavorite {
+    -user: ObjectId
+}
+
+' --- RELATIONSHIPS ---
+
+' 1. Service down to Resources
+GoCamplyService ..> ResourceCampgrounds: "/api/v1/campgrounds"
+GoCamplyService ..> ResourceBookings: "/api/v1/bookings"
+GoCamplyService ..> ResourceAuth: "/api/v1/auth"
+GoCamplyService ..> ResourceFavorites: "/api/v1/favorites"
+
+' 2. Resource Inter-connections
+ResourceCampgrounds ..> ResourceCampground: "/{id}"
+ResourceCampground ..> ResourceBookings: "/{campgroundId}/..."
+ResourceCampground ..> ResourceFavorites: "/{campgroundId}/..."
+ResourceBookings ..> ResourceBooking: "/{id}"
+
+' 3. Force Representations to the bottom using hidden lines if needed,
+'    or simply let the natural top-down flow handle it.
+ResourceCampground ..> RepresentationCampground: "<<use>>"
+ResourceCampgrounds ..> RepresentationCampground: "<<use>>"
+ResourceBooking ..> RepresentationBooking: "<<use>>"
+ResourceBookings ..> RepresentationBooking: "<<use>>"
+ResourceFavorites ..> RepresentationFavorite: "<<use>>"
+ResourceAuth ..> RepresentationUser: "<<use>>"
+
+' 4. Model relationships
+RepresentationBooking ..> RepresentationUser
+RepresentationBooking ..> RepresentationCampground
+RepresentationFavorite ..> RepresentationUser
+RepresentationFavorite ..> RepresentationCampground
+RepresentationCampground ..> RepresentationBooking
+
+@enduml

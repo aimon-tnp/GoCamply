@@ -6,7 +6,7 @@ rectangle "GoCamply System" as GoCamplySystem {
     usecase "Login" as login
     usecase "Logout" as logout
     usecase "View Campgrounds" as viewCampgrounds
-    usecase "Manage Appointments (Get, Create, Update, Delete)" as manageAppt
+    usecase "Manage Bookings (Get, Create, Update, Delete)" as manageAppt
     usecase "Manage Campgrounds (Get, Create, Update, Delete)" as manageCampground
     usecase "Manage Favorite Campgrounds (Favorite, Unfavorite, Get favorited)" as favoriteCampground
     usecase "Get Availability" as getAvailability

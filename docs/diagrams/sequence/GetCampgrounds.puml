@@ -1,0 +1,27 @@
+@startuml Get Campgrounds (GET)
+
+header GoCamply Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Campgrounds (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:campgrounds" as routerCampgrounds
+participant "<<controllers>>\n:campgrounds" as controllersCampgrounds
+participant "<<model>>\n:Campground" as modelCampground
+database "<<MongoDB>>\n:campgrounds" as CampgroundsDatabase
+
+client->server ++: req.get('/api/v1/campgrounds?select=&sort=&page=&limit=&filters...')
+server->routerCampgrounds ++: app.use('/api/v1/campgrounds', campgrounds)
+routerCampgrounds -> controllersCampgrounds ++: getCampgrounds(req)
+controllersCampgrounds -> controllersCampgrounds ++: parse query params (select, sort, page, limit, filters)
+controllersCampgrounds -> modelCampground ++: find(parsedQuery).populate('appointments')
+modelCampground -> CampgroundsDatabase ++: find & populate appointments
+CampgroundsDatabase --> modelCampground --: campgrounds
+controllersCampgrounds <-- modelCampground --: campgrounds
+controllersCampgrounds -> controllersCampgrounds ++: calculate pagination metadata
+controllersCampgrounds -> client --: response 200 { success: true, count, data: campgrounds, pagination }
+
+note over controllersCampgrounds: on error -> 500 Server Error
+
+@enduml

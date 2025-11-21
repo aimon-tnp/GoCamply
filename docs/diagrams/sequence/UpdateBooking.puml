@@ -1,0 +1,39 @@
+@startuml Update Booking (PUT)
+
+header GoCamply Sequence Diagram
+footer Page %page% of %lastpage%
+title "Update Booking (PUT)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:bookings" as routerBookings
+participant "<<middleware>>\n:protect" as mwProtect
+participant "<<middleware>>\n:authorize('admin','user')" as mwAuthorize
+participant "<<controllers>>\n:bookings" as controllersBookings
+participant "<<model>>\n:Booking" as modelBooking
+database "<<MongoDB>>\n:bookings" as BookingsDatabase
+
+client->server ++: req.put('/api/v1/bookings/{id}')
+server->routerBookings ++: app.use('/api/v1/bookings', bookings)
+routerBookings -> mwProtect ++: protect(req)
+mwProtect -> mwProtect --: verify token / set req.user
+mwProtect --> routerBookings --: next()
+routerBookings -> mwAuthorize ++: authorize('admin','user')(req)
+mwAuthorize -> mwAuthorize --: check req.user.role
+mwAuthorize --> routerBookings --: next() (if allowed)
+routerBookings -> controllersBookings ++: updateBooking(req)
+controllersBookings -> modelBooking ++: findById(req.params.id)
+modelBooking -> BookingsDatabase ++: find booking
+BookingsDatabase --> modelBooking --: booking
+controllersBookings <-- modelBooking --: booking
+controllersBookings -> controllersBookings ++: check ownership (booking.user === req.user.id) OR admin
+controllersBookings -> modelBooking ++: findByIdAndUpdate(req.params.id, req.body)
+modelBooking -> BookingsDatabase ++: update booking
+BookingsDatabase --> modelBooking --: updatedBooking
+controllersBookings <-- modelBooking --: updatedBooking
+controllersBookings -> client --: response 200 { success: true, data: updatedBooking }
+
+note over controllersBookings: If not owner and not admin -> 401 unauthorized
+note over controllersBookings: If booking not found -> 404 not found
+
+@enduml
